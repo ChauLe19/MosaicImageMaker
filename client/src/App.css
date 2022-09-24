@@ -1,10 +1,18 @@
+body {
+  box-sizing: border-box;
+}
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.main {
+  display: grid;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  grid-template-columns: 40% 60%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -15,12 +23,13 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: fit-content;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: flex-start;
+  padding-left: 10vh;
+  padding-right: 10vh;
   color: white;
 }
 
