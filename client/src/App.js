@@ -70,15 +70,10 @@ function App() {
             </button>
           </div>
           <img src='https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg' style={{ width: "100%" }} />
-          <button style={{ width: "100%" }}>
-            Generate/Reshuffle
-          </button>
+          <input type="submit" form="GenerateFormID" style={{ width: "100%" }}  value="Generate/Reshuffle"/>
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
-          <form onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
-            {/* <p>
-              {post}
-            </p> */}
+          <form id="GenerateFormID" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
             <div className="form-inline justify-content-center mt-5" style={{ alignSelf: "center" }}>
               <label for="image-edit" className="ml-sm-4 font-weight-bold mr-md-4" >
                 <img src={preview} width="100%" />
@@ -100,7 +95,7 @@ function App() {
             <input type="file" multiple onChange={fileSelectedHandler} />
           </form>
           <div style={{ height: "300px", overflowY: "scroll" }}>
-            <div style={{  }}>
+            <div>
               {
                 collection.map((img) =>
                   <img src={URL.createObjectURL(img)} style={{display: "inline-block", width: "25%", objectFit: "cover", aspectRatio: "1", float: "left" }} />
