@@ -13,6 +13,7 @@ npm install
 cd server
 pip3 install flask
 pip3 install flask-cors
+pip3 install Pillow
 ```
 
 3. Start the server
