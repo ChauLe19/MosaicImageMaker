@@ -16,8 +16,10 @@ function App() {
   const baseURL = "http://127.0.0.1:5000";
   const [post, setPost] = React.useState("");
   const [preview, setPreview] = React.useState("https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg");
+  const [mosaic, setMosaic] = React.useState("https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg");
   const [collection, setCollection] = React.useState([])
 
+  // this is mostly for testing
   React.useEffect(() => {
     axios.post(`${baseURL}/receiver`, {
       text: 'Send data'
@@ -27,7 +29,7 @@ function App() {
   }, []);
 
   const Upload = async (formData) => {
-    await fetch(`${baseURL}/upload-image`, {
+    await fetch(`${baseURL}/generate`, {
       method: 'POST',
       body: formData
     }).then(resp => {
@@ -80,19 +82,14 @@ function App() {
               </label>
               <input type="file" id="image-edit" name="file" accept="image/*" className="file-custom" style={{ width: "50px", display: "none" }} onChange={previewSelectedHandler} />
             </div>
-            {/* <div className="input-group justify-content-center mt-4">
-              <button type="submit" className="btn btn-md btn-primary">Upload</button>
-            </div> */}
             <div style={{ textAlign: "left", padding: "5vh" }}>
               <label>Cell Density:</label>
               <input type="range" min={1} max={100} defaultValue={50} class="slider" id="myRange" style={{ width: "100%" }} />
               <label>Other param:</label>
               <input type="range" min={1} max={100} defaultValue={50} class="slider" id="myRange" style={{ width: "100%" }} />
             </div>
-          </form>
-          <form>
 
-            <input type="file" multiple onChange={fileSelectedHandler} />
+            <input type="file" multiple onChange={fileSelectedHandler} name="collection[]" accept="image/*" style={{gridColumn:"1/3"}}/>
           </form>
           <div style={{ height: "300px", overflowY: "scroll" }}>
             <div>
