@@ -60,9 +60,9 @@ def handleUploadingImage():
         #img = Image.open(os.path.join(IMAGES_FOLDER, file.filename))
         #img.save(file.filename[:-3] + "png")
         
-        for collection_file in request.files.getlist('collection[]'):
+        for collection_file in request.files.getlist('collection'):
             if (checkFileType(collection_file.headers['Content-Type'])):
-                file.save(os.path.join(COLLECTION_FOLDER, collection_file.filename)) # os.getcwd()
+                collection_file.save(os.path.join(COLLECTION_FOLDER, collection_file.filename)) # os.getcwd()
 
         # currently only send back what was sent to server
         # next step, send the mosaic image
