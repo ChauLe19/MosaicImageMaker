@@ -1,6 +1,7 @@
+from msilib.schema import MIME
 from re import I
 from PIL import Image #python image library
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import sys
@@ -63,7 +64,9 @@ def handleUploadingImage():
             if (checkFileType(collection_file.headers['Content-Type'])):
                 file.save(os.path.join(COLLECTION_FOLDER, collection_file.filename)) # os.getcwd()
 
-        return jsonify({ 'success': True, 'file': 'Received'})
+        # currently only send back what was sent to server
+        # next step, send the mosaic image
+        return send_file(os.path.join(IMAGES_FOLDER, file.filename), mimetype=file.headers['Content-Type'])
     else:
         print("not an image file")
         return jsonify({ 'success': False, 'file': 'Not Image'})
