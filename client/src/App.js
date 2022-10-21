@@ -115,8 +115,8 @@ function App() {
           <div style={{ height: "300px", overflowY: "scroll" }}>
             <div>
               <div style={{ display: "inline-block", width: "25%", aspectRatio: "1", float: "left", padding: "5px", boxSizing: "border-box" }}>
-                <input id='collection[]' type="file" multiple onChange={fileSelectedHandler} name="collection[]" accept="image/*" style={{ display: 'none' }} />
-                <label for="collection[]" >
+                <input id='collection' form='GenerateFormID' type="file" multiple onChange={fileSelectedHandler} name="collection" accept="image/*" style={{ display: 'none' }} />
+                <label for="collection" >
                   <FontAwesomeIcon icon={faPlus} className="add-image-button" style={{ aspectRatio: "1/1", border: "2px solid black", boxSizing: "border-box" }} />
                 </label>
               </div>
