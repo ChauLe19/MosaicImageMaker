@@ -1,6 +1,7 @@
 body {
   box-sizing: border-box;
 }
+
 .App {
   text-align: center;
   display: flex;
@@ -15,10 +16,38 @@ body {
   grid-template-columns: 40% 60%;
 }
 
+button.flat {
+  box-shadow: none;
+  border: 0px;
+  cursor: pointer;
+}
+
+button.nobg {
+  background: none;
+}
+
+.collection-cell:hover img {
+  filter: brightness(50%);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.add-image-button {
+  /* display: inline-block; */
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  float: left;
+  box-sizing: border-box;
+  height: 100%;
+  background: #D3D3D3;
+}
+
+.add-image-button:hover {
+  background: gray;
 }
 
 .App-header {
@@ -41,6 +70,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
