@@ -17,7 +17,7 @@ function App() {
   const baseURL = "http://127.0.0.1:5000";
   const [post, setPost] = React.useState("");
   const [preview, setPreview] = React.useState("https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg");
-  const [mosaic, setMosaic] = React.useState("https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg");
+  const [mosaic, setMosaic] = React.useState("");
   const [collection, setCollection] = React.useState([])
 
   // this is mostly for testing
@@ -84,16 +84,14 @@ function App() {
         <div style={{ padding: "5vh" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <button class="flat nobg">
-              <FontAwesomeIcon icon={faDownload} />
-              Download
+              <FontAwesomeIcon icon={faDownload} /> &nbsp;Download
             </button>
             <button class="flat nobg">
-              <FontAwesomeIcon icon={faArrowTurnRight} />
-              Share
+              <FontAwesomeIcon icon={faArrowTurnRight} />&nbsp;Share
             </button>
           </div>
-          <img src={`data:image/jpeg;base64,${mosaic}`} style={{ width: "100%" }} />
-          <input type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate/Reshuffle" />
+          <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg" } style={{ width: "100%" }} />
+          <input type="submit" form="GenerateFormID" style={{ width: "100%", padding: "1vh" }} value="Generate/Reshuffle" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
           <form id="GenerateFormID" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
