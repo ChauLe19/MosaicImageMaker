@@ -10,6 +10,9 @@ import sys
 IMAGES_FOLDER = os.path.join(os.getcwd(),"save-images")
 COLLECTION_FOLDER = os.path.join(os.getcwd(),"collection-images")
 
+#allowed types
+allowedTypes = {'image/png', 'image/jpg', 'image/jpeg'}
+
 #Set up Flask:
 app = Flask(__name__)
 #Set up Flask to bypass CORS:
@@ -28,57 +31,66 @@ def postME():
 
 @app.route('/generate', methods=['POST'])
 def handleUploadingImage():
-    files = request.files
-    file = files.get('file')
 
-    # handle image here
-    # TODO
-    #1. Check that file is an image file
-    #2. Convert image to one type - PNG? (if needed)
-    #3. Rename image? (if needed)
-    #4. resize image to standard size (512x512) (this would make all the images square?) ??
-    #5. save to save-images folder in server  (directory not found)
+    #TODO
+    """
+    1.  need a separate request for when the user clicks the plus button and adds a file to collection, so that they can be checked and/or rejected individually
+        right now the user could add multiple, but only one is being checked.
 
-    #get amount of files in directory (for renaming)
-    amountOfImages = 0
-    for path in IMAGES_FOLDER:
-        if os.path.isfile(os.path.join(IMAGES_FOLDER, path)):
-            amountOfImages = amountOfImages + 1
-    print("amount of images = ", amountOfImages)
+    2.  need a separate requrest for when a user clicks an image in the collection to delete.
 
+    3. If a user sends an invalid image, dont have it added to the UI 
+
+    4. separate request for when a user wants to download an image
+    """
+
+    files = request.files #the POST file/s example of files: files =  ImmutableMultiDict([('file', <FileStorage: '' ('application/octet-stream')>), ('collection', <FileStorage: 'test3.png' ('image/png')>)])
+    
     #check for file
-    if (file.filename == ""):
+    if not (files.getlist('collection')):
         print("no file")
         return jsonify({ 'success': False, 'file': 'No File'})
-
-    #check there is an image file
-    if (checkFileType(file.headers['Content-Type'])):
-        #save image to folder
-        file.save(os.path.join(IMAGES_FOLDER, file.filename)) # os.getcwd()
-
-        #convert image and resave
-        #img = Image.open(os.path.join(IMAGES_FOLDER, file.filename))
-        #img.save(file.filename[:-3] + "png")
+    
+    submission_name = files.getlist('collection')[0].filename
         
-        for collection_file in request.files.getlist('collection'):
-            if (checkFileType(collection_file.headers['Content-Type'])):
-                collection_file.save(os.path.join(COLLECTION_FOLDER, collection_file.filename)) # os.getcwd()
-
-        # currently only send back what was sent to server
-        # next step, send the mosaic image
-        return send_file(os.path.join(IMAGES_FOLDER, file.filename), mimetype=file.headers['Content-Type'])
-    else:
-        print("not an image file")
-        return jsonify({ 'success': False, 'file': 'Not Image'})
+    for collection_file in request.files.getlist('collection'):
+        if (checkFileType(collection_file.headers['Content-Type'])):
+            submission_name = saveAndConvertImageToCollection(collection_file)
+        else:
+            print("not an acceptable image file")
+            return jsonify({ 'success': False, 'file': 'Not Image'})
 
 
-#check images function
+
+    # currently only send back what was sent to server
+    # next step, send the mosaic image
+    print("sub name = ",submission_name)
+    return send_file(os.path.join(COLLECTION_FOLDER, submission_name))
+
+#check that an image is an acceptable type
 def checkFileType(filetype):
-    print("checking type")
-    allowedTypes = {'image/png', 'image/jpg', 'image/jpeg'}
+    print("Checking Image Type")
+    
     if (filetype in allowedTypes):
         return True
     return False
+
+def saveAndConvertImageToCollection(file):
+    print("Converting and Saving Image")
+    currentFileName = file.filename
+    file.save(os.path.join(COLLECTION_FOLDER, file.filename)) # os.getcwd()
+
+    if not (file.filename.endswith(".png")):
+        print("not a png")
+        image = Image.open(os.path.join(COLLECTION_FOLDER, file.filename))
+        newFileName = os.path.splitext(file.filename)[0] + ".png"
+        print(newFileName)
+        image.save(os.path.join(COLLECTION_FOLDER, newFileName), format="png")
+        image.close()
+        os.remove(os.path.join(COLLECTION_FOLDER, file.filename))
+        currentFileName = newFileName
+        
+    return currentFileName
 
 
 if __name__ == "__main__": 
