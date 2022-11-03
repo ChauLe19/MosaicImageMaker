@@ -31,16 +31,14 @@ def postME():
 
 @app.route('/generate', methods=['POST'])
 def handleUploadingImage():
+    density = request.form['density']
 
     #TODO
     """
     1.  need a separate request for when the user clicks the plus button and adds a file to collection, so that they can be checked and/or rejected individually
         right now the user could add multiple, but only one is being checked.
-
     2.  need a separate requrest for when a user clicks an image in the collection to delete.
-
     3. If a user sends an invalid image, dont have it added to the UI 
-
     4. separate request for when a user wants to download an image
     """
 
