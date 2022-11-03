@@ -11,12 +11,13 @@ import {
 } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTurnRight, faDownload, faPlus, faX } from '@fortawesome/free-solid-svg-icons'
-import {Buffer} from 'buffer';
+import { Buffer } from 'buffer';
+import Description from './Description';
 
 function App() {
   const baseURL = "http://127.0.0.1:5000";
   const [post, setPost] = React.useState("");
-  const [preview, setPreview] = React.useState("https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg");
+  const [preview, setPreview] = React.useState("https://thumbs.dreamstime.com/b/thin-line-black-camera-logo-like-upload-your-photo-thin-line-black-camera-logo-like-upload-your-photo-graphic-art-design-element-106033006.jpg");
   const [mosaic, setMosaic] = React.useState("");
   const [collection, setCollection] = React.useState([])
 
@@ -35,12 +36,12 @@ function App() {
       method: 'POST',
       body: formData,
     }).then(resp => {
-      if(resp.status === 200)
+      if (resp.status === 200)
         return resp.blob()
       else
         console.log(resp)
     }).then(data => {
-        
+
       let blob = new Blob([data], { type: "text/plain" });
       var reader = new FileReader();
       reader.readAsDataURL(blob);
@@ -91,14 +92,14 @@ function App() {
               <FontAwesomeIcon icon={faArrowTurnRight} />&nbsp;Share
             </button>
           </div>
-          <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg" } style={{ width: "100%" }} />
+          <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg"} style={{ width: "100%" }} />
           <input className='generateButton' type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
           <form id="GenerateFormID" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
-            <div className="form-inline justify-content-center mt-5" style={{ alignSelf: "center" }}>
-              <label for="image-edit" className="ml-sm-4 font-weight-bold mr-md-4" >
-                <img src={preview} width="100%" />
+            <div style={{ alignSelf: "center" }}>
+              <label for="image-edit">
+                <img id="mosaic-image" src={preview} width="100%" />
               </label>
               <input type="file" id="image-edit" name="file" accept="image/*" className="file-custom" style={{ width: "50px", display: "none" }} onChange={previewSelectedHandler} />
             </div>
@@ -123,11 +124,8 @@ function App() {
               </div>
               {
                 collection.map((img) =>
-                  <div className='collection-cell' style={{position: "relative"}} onClick={() => removeImage(img)} >
-                    {/* <div style={{ width: "100%", height: "100%", boxSizing: 'border-box', position: 'absolute', padding: 'inherit', inset: '0px', boxSizing: 'border-box'}}>
-                      <FontAwesomeIcon icon={faX} style= {{width: '100%', height: "100%"}}/>
-                    </div> */}
-                    <img className='collection-cell-item' src={URL.createObjectURL(img)} style={{ objectFit: "cover", width: "100%", height: "100%"}} />
+                  <div className='collection-cell' style={{ position: "relative" }} onClick={() => removeImage(img)} >
+                    <img className='collection-cell-item' src={URL.createObjectURL(img)} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
                   </div>
                 )
               }
@@ -136,6 +134,7 @@ function App() {
 
         </div>
       </div>
+        <Description/>
     </div >
   );
 }
