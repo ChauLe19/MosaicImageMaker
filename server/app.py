@@ -28,6 +28,7 @@ def postME():
 
 @app.route('/generate', methods=['POST'])
 def handleUploadingImage():
+    density = request.form['density']
     files = request.files
     file = files.get('file')
 

@@ -1,3 +1,10 @@
+:root {
+  --primary-color: #3066be;
+  --background-color: white;
+  --accent-color: white;
+  --warn-color: red;
+}
+
 body {
   box-sizing: border-box;
 }
@@ -6,6 +13,8 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--primary-color);
 }
 
 .main {
@@ -14,6 +23,29 @@ body {
   width: 100%;
   height: fit-content;
   grid-template-columns: 40% 60%;
+}
+
+input.generateButton{
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  box-shadow: none;
+  cursor: pointer;
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-weight: bold;
+}
+
+input[type='range']{
+  background-color: var(--primary-color);
+}
+
+input.generateButton:hover{
+  filter: brightness(50%);
+}
+
+button{
+  color: var(--primary-color);
 }
 
 button.flat {
@@ -30,6 +62,22 @@ button.nobg {
   filter: brightness(50%);
 }
 
+.collection-cell {
+  display: inline-block;
+  width: 25%;
+  aspect-ratio: 1/1;
+  float: left;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.collection-cell-item {
+ aspect-ratio: 1/1; 
+ border: 2px solid var(--primary-color);
+ box-sizing: border-box;
+ border-radius: 0.5rem;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -39,11 +87,14 @@ button.nobg {
 .add-image-button {
   /* display: inline-block; */
   object-fit: cover;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   float: left;
   box-sizing: border-box;
   height: 100%;
-  background: #D3D3D3;
+  background: var(--background-color);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
 }
 
 .add-image-button:hover {
@@ -51,7 +102,7 @@ button.nobg {
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--primary-color);
   min-height: fit-content;
   display: flex;
   flex-direction: row;

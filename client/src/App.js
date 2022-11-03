@@ -30,9 +30,10 @@ function App() {
   }, []);
 
   const Upload = async (formData) => {
+    console.log(formData)
     await fetch(`${baseURL}/generate`, {
       method: 'POST',
-      body: formData
+      body: formData,
     }).then(resp => {
       if(resp.status === 200)
         return resp.blob()
@@ -91,7 +92,7 @@ function App() {
             </button>
           </div>
           <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg" } style={{ width: "100%" }} />
-          <input type="submit" form="GenerateFormID" style={{ width: "100%", padding: "1vh" }} value="Generate/Reshuffle" />
+          <input className='generateButton' type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
           <form id="GenerateFormID" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
@@ -103,9 +104,9 @@ function App() {
             </div>
             <div style={{ textAlign: "left", padding: "5vh" }}>
               <label>Cell Density:</label>
-              <input type="range" min={1} max={100} defaultValue={50} class="slider" id="myRange" style={{ width: "100%" }} />
+              <input name='density' type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
               <label>Other param:</label>
-              <input type="range" min={1} max={100} defaultValue={50} class="slider" id="myRange" style={{ width: "100%" }} />
+              <input type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
             </div>
 
           </form>
@@ -114,19 +115,19 @@ function App() {
           </div>
           <div style={{ height: "300px", overflowY: "scroll" }}>
             <div>
-              <div style={{ display: "inline-block", width: "25%", aspectRatio: "1", float: "left", padding: "5px", boxSizing: "border-box" }}>
+              <div className='collection-cell'>
                 <input id='collection' form='GenerateFormID' type="file" multiple onChange={fileSelectedHandler} name="collection" accept="image/*" style={{ display: 'none' }} />
                 <label for="collection" >
-                  <FontAwesomeIcon icon={faPlus} className="add-image-button" style={{ aspectRatio: "1/1", border: "2px solid black", boxSizing: "border-box" }} />
+                  <FontAwesomeIcon icon={faPlus} className="add-image-button" style={{ boxSizing: "border-box" }} />
                 </label>
               </div>
               {
                 collection.map((img) =>
-                  <div className='collection-cell' style={{ display: "inline-block", width: "25%", aspectRatio: "1/1", float: "left", padding: "5px", boxSizing: "border-box", position: 'relative' }} onClick={() => removeImage(img)} >
+                  <div className='collection-cell' style={{position: "relative"}} onClick={() => removeImage(img)} >
                     {/* <div style={{ width: "100%", height: "100%", boxSizing: 'border-box', position: 'absolute', padding: 'inherit', inset: '0px', boxSizing: 'border-box'}}>
                       <FontAwesomeIcon icon={faX} style= {{width: '100%', height: "100%"}}/>
                     </div> */}
-                    <img src={URL.createObjectURL(img)} style={{ objectFit: "cover", width: "100%", height: "100%", border: "2px solid black", boxSizing: "border-box" }} />
+                    <img className='collection-cell-item' src={URL.createObjectURL(img)} style={{ objectFit: "cover", width: "100%", height: "100%"}} />
                   </div>
                 )
               }
