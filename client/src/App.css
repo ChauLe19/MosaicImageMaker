@@ -25,6 +25,10 @@ body {
   grid-template-columns: 40% 60%;
 }
 
+#mosaic-image:hover {
+  filter: brightness(75%);
+}
+
 input.generateButton{
   color: var(--primary-color);
   background-color: var(--background-color);
@@ -41,17 +45,23 @@ input[type='range']{
 }
 
 input.generateButton:hover{
-  filter: brightness(50%);
+  filter: brightness(75%);
 }
 
 button{
   color: var(--primary-color);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
 }
 
 button.flat {
   box-shadow: none;
   border: 0px;
   cursor: pointer;
+}
+
+button.flat:hover {
+  background-color: gainsboro;
 }
 
 button.nobg {
@@ -98,7 +108,7 @@ button.nobg {
 }
 
 .add-image-button:hover {
-  background: gray;
+  background: gainsboro;
 }
 
 .App-header {
