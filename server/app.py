@@ -19,7 +19,7 @@ app = Flask(__name__)
 cors = CORS(app)
 
 
-
+#@app.route("/")
 #Create the receiver API POST endpoint:
 @app.route("/receiver", methods=["POST"])
 def postME():
@@ -29,8 +29,23 @@ def postME():
     return "receiving " + str(request.get_json())
 
 
+@app.route('/uploadmainimage', methods=['POST'])
+def uploadMain():
+    print("uploadmain")
+
+@app.route('/deletefromcollection', methods=['POST'])
+def deleteFromCollection():
+    print("delete")
+
+
 @app.route('/generate', methods=['POST'])
-def handleUploadingImage():
+def generateMos():
+    print("gen")
+    return send_file(os.path.join(COLLECTION_FOLDER, "test.png"))
+
+
+@app.route('/uploadtocollection', methods=['POST']) #change to /collection??
+def handleUploadingImageToCollection():
     density = request.form['density']
 
     #TODO
