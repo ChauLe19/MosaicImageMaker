@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+ import logo from './logo.svg';
 import './App.css';
 import axios from "axios"
 import React from 'react';
@@ -10,7 +10,7 @@ import {
   Navigate
 } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowTurnRight, faDownload, faPlus, faX } from '@fortawesome/free-solid-svg-icons'
+import { faArrowTurnRight, faDownload, faPlus, faWindowRestore, faX } from '@fortawesome/free-solid-svg-icons'
 import { Buffer } from 'buffer';
 import Description from './Description';
 
@@ -31,6 +31,8 @@ function App() {
   }, []);
 
   const Upload = async (formData) => {
+    //TODO seperate fetch for each form
+    //window.alert(formData)
     console.log(formData)
     await fetch(`${baseURL}/generate`, {
       method: 'POST',
@@ -52,7 +54,23 @@ function App() {
       }
     })
   }
+
   const handleSubmit = (e) => {
+    window.alert(e.target)
+    window.alert(e.target.id)
+    if (e.target.id == "generateFormID") {
+      window.alert(e.target.id)
+    }
+    else if (e.target.id == "mainImageID") {
+      previewSelectedHandler(e)
+      window.alert(e.target.id)
+    }
+    else if (e.target.id == "collectionFormID") {
+      e.
+      fileSelectedHandler(e)
+      window.alert(e.target.id)
+    }
+    
     e.preventDefault()
     const formData = new FormData(e.target);
 
@@ -61,6 +79,7 @@ function App() {
 
   const fileSelectedHandler = (e) => {
     setCollection([...e.target.files, ...collection])
+    //handleSubmit(e.form)
   }
 
   const removeImage = (file) => {
@@ -82,6 +101,7 @@ function App() {
         </h2>
 
       </header>
+
       <div className='main'>
         <div style={{ padding: "5vh" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -93,15 +113,20 @@ function App() {
             </button>
           </div>
           <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg"} style={{ width: "100%" }} />
-          <input className='generateButton' type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate" />
+
+          <form id="generateFormID"  enctype="multipart/form-data"  onSubmit={handleSubmit}>
+            <input className='generateButton' type="submit" form="generateFormID" style={{ width: "100%" }} value="Generate"/>
+          </form>
+         
         </div>
+
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
-          <form id="GenerateFormID" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
+
+          <form id="gen" onSubmit={handleSubmit} className="container mt-5 pt-5 pb-5" enctype="multipart/form-data" style={{ width: "100%", display: "grid", gridTemplateColumns: " 20% 80%" }}>
             <div style={{ alignSelf: "center" }}>
               <label for="image-edit">
                 <img id="mosaic-image" src={preview} width="100%" />
               </label>
-              <input type="file" id="image-edit" name="file" accept="image/*" className="file-custom" style={{ width: "50px", display: "none" }} onChange={previewSelectedHandler} />
             </div>
             <div style={{ textAlign: "left", padding: "5vh" }}>
               <label>Cell Density:</label>
@@ -109,15 +134,23 @@ function App() {
               <label>Other param:</label>
               <input type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
             </div>
-
           </form>
+
+          <form id="mainImageID" onChange={handleSubmit} enctype="multipart/form-data">
+            <input type="file" id="image-edit" form="mainImageID" name="file" accept="image/*" className="file-custom" style={{ width: "50px", display: "none" }}  />
+          </form>
+
           <div style={{ textAlign: "left", fontWeight: 'bold' }}>
             Collection
           </div>
           <div style={{ height: "300px", overflowY: "scroll" }}>
             <div>
               <div className='collection-cell'>
-                <input id='collection' form='GenerateFormID' type="file" multiple onChange={fileSelectedHandler} name="collection" accept="image/*" style={{ display: 'none' }} />
+
+                <form id="collectionFormID"  enctype="multipart/form-data" onChange={handleSubmit}>
+                  <input id='collection' form="collectionFormID" type="file" name="collection" accept="image/*" style={{ display: 'none' }}/>
+                </form>
+
                 <label for="collection" >
                   <FontAwesomeIcon icon={faPlus} className="add-image-button" style={{ boxSizing: "border-box" }} />
                 </label>
@@ -131,9 +164,10 @@ function App() {
               }
             </div>
           </div>
-
         </div>
+
       </div>
+
         <Description/>
     </div >
   );
