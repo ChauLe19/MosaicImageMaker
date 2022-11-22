@@ -130,7 +130,7 @@ function App() {
             </div>
             <div style={{ textAlign: "left", padding: "5vh" }}>
               <label>Cell Density:</label>
-              <input name='density' type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
+              <input name='density' type="range" min={1} max={100} defaultValue={20} class="slider" style={{ width: "100%" }} />
               <label>Other param:</label>
               <input type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
             </div>

@@ -5,10 +5,11 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import sys
+from maker import *
 
 #Path to save-images
-IMAGES_FOLDER = os.path.join(os.getcwd(),"save-images")
-COLLECTION_FOLDER = os.path.join(os.getcwd(),"collection-images")
+IMAGES_FOLDER = os.path.join(os.getcwd(),"save_images")
+COLLECTION_FOLDER = os.path.join(os.getcwd(),"collection_images")
 
 #allowed types
 allowedTypes = {'image/png', 'image/jpg', 'image/jpeg'}
@@ -65,6 +66,7 @@ def handleUploadingImageToCollection():
         return jsonify({ 'success': False, 'file': 'No File'})
     
     submission_name = files.getlist('collection')[0].filename
+    main_mosaic_image = files.get('file')
         
     for collection_file in request.files.getlist('collection'):
         if (checkFileType(collection_file.headers['Content-Type'])):
@@ -78,7 +80,13 @@ def handleUploadingImageToCollection():
     # currently only send back what was sent to server
     # next step, send the mosaic image
     print("sub name = ",submission_name)
-    return send_file(os.path.join(COLLECTION_FOLDER, submission_name))
+    print("main name = ", main_mosaic_image)
+    main_mosaic_image.save(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename))
+    # return send_file(os.path.join(COLLECTION_FOLDER, submission_name))
+    
+    mosaic_pic(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), int(density))
+    print('DONE: ', main_mosaic_image.filename)
+    return send_file(os.path.join(os.getcwd(), os.path.join(IMAGES_FOLDER, main_mosaic_image.filename)))
 
 #check that an image is an acceptable type
 def checkFileType(filetype):
@@ -93,12 +101,14 @@ def saveAndConvertImageToCollection(file):
     currentFileName = file.filename
     file.save(os.path.join(COLLECTION_FOLDER, file.filename)) # os.getcwd()
 
-    if not (file.filename.endswith(".png")):
-        print("not a png")
+    # TODO: Discuss again since maker.py doesn't work with .png but with .jpg (original code was png)
+    if not (file.filename.endswith(".jpg") or file.filename.endswith(".jpeg")):
+        print("not a jpg")
         image = Image.open(os.path.join(COLLECTION_FOLDER, file.filename))
-        newFileName = os.path.splitext(file.filename)[0] + ".png"
+        newFileName = os.path.splitext(file.filename)[0] + ".jpg"
         print(newFileName)
-        image.save(os.path.join(COLLECTION_FOLDER, newFileName), format="png")
+        image = image.convert('RGB')
+        image.save(os.path.join(COLLECTION_FOLDER, newFileName))
         image.close()
         os.remove(os.path.join(COLLECTION_FOLDER, file.filename))
         currentFileName = newFileName
