@@ -57,8 +57,7 @@ function App() {
     e.preventDefault()
     const formData = new FormData(e.target);
     formData.delete('collection')
-    for(const file of collection)
-    {
+    for (const file of collection) {
       formData.append('collection', file)
     }
 
@@ -71,7 +70,7 @@ function App() {
       return temp_collection.findIndex(obj => obj.name === c.name) === index;
     });
     console.log(unique_collection)
-  
+
     setCollection(unique_collection)
   }
 
@@ -84,6 +83,14 @@ function App() {
 
   const handleDensity = (e) => {
     setDensity(e.target.value);
+  }
+
+  const handleDownload = (e) => {
+    const linkSource = `data:image/jpeg;base64,${mosaic}`;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = linkSource;
+    downloadLink.download = 'index.jpg';
+    downloadLink.click();
   }
 
   const previewSelectedHandler = (e) => {
@@ -101,7 +108,7 @@ function App() {
       <div className='main'>
         <div style={{ padding: "5vh" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <button class="flat nobg">
+            <button class="flat nobg" onClick={handleDownload}>
               <FontAwesomeIcon icon={faDownload} /> &nbsp;Download
             </button>
             <button class="flat nobg">
@@ -149,7 +156,7 @@ function App() {
 
         </div>
       </div>
-        <Description/>
+      <Description />
     </div >
   );
 }
