@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "imagekit": "^4.1.1"
+  }
+}
