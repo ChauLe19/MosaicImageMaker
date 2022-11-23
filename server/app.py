@@ -7,6 +7,17 @@ from flask_cors import CORS
 import os
 import sys
 from maker import *
+import base64
+import hashlib
+import asyncio
+import threading
+from imagekitio import ImageKit
+from imagekitio.models.UploadFileRequestOptions import UploadFileRequestOptions
+imagekit = ImageKit(
+    private_key='private_rHERXddWmVnU1f3XW5oYGIqNlkw=',
+    public_key='public_MAc4Hls7UWfyyhszVd29r1Smiso=',
+    url_endpoint = 'https://ik.imagekit.io/MosaicImageMaker'
+)
 
 #Path to save-images
 IMAGES_FOLDER = os.path.join(os.getcwd(),"save_images")
@@ -73,11 +84,18 @@ def handleUploadingImage():
     
     mosaic_pic(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), int(density))
     print('DONE: ', main_mosaic_image.filename)
+    
+    # this helps deleting file after sending the result
     return_data = io.BytesIO()
     with open(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), 'rb') as fo:
-        return_data.write(fo.read())
+        reading = fo.read()
+        return_data.write(reading)
         return_data.seek(0)    
-
+        base64_image = base64.b64encode(reading)
+        thread = threading.Thread(target = uploadToDB, args=(base64_image,))
+        thread.daemon = True
+        thread.start()
+    
     for image_name in to_be_deleted_images:
         os.remove(os.path.join(COLLECTION_FOLDER, image_name))
     os.remove(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename))
@@ -112,6 +130,13 @@ def saveAndConvertImage(file, folder_path):
     file.close()
         
     return currentFileName
+
+def uploadToDB(base64_image):
+    upload = imagekit.upload_file(
+            file = base64_image,
+            file_name=hashlib.sha1(base64_image).hexdigest() + ".jpg",
+            options=UploadFileRequestOptions(overwrite_file=True, use_unique_file_name= False)
+        )
 
 
 if __name__ == "__main__": 
