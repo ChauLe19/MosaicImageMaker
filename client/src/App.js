@@ -20,6 +20,7 @@ function App() {
   const [preview, setPreview] = React.useState("https://thumbs.dreamstime.com/b/thin-line-black-camera-logo-like-upload-your-photo-thin-line-black-camera-logo-like-upload-your-photo-graphic-art-design-element-106033006.jpg");
   const [mosaic, setMosaic] = React.useState("");
   const [collection, setCollection] = React.useState([])
+  const [density, setDensity] = React.useState(20)
 
   // this is mostly for testing
   React.useEffect(() => {
@@ -81,6 +82,10 @@ function App() {
     }
   }
 
+  const handleDensity = (e) => {
+    setDensity(e.target.value);
+  }
+
   const previewSelectedHandler = (e) => {
     setPreview(URL.createObjectURL(e.target.files[0]));
   }
@@ -115,10 +120,9 @@ function App() {
               <input type="file" id="image-edit" name="file" accept="image/*" className="file-custom" style={{ width: "50px", display: "none" }} onChange={previewSelectedHandler} />
             </div>
             <div style={{ textAlign: "left", padding: "5vh" }}>
-              <label>Cell Density:</label>
-              <input name='density' type="range" min={1} max={100} defaultValue={20} class="slider" style={{ width: "100%" }} />
-              <label>Other param:</label>
-              <input type="range" min={1} max={100} defaultValue={50} class="slider" style={{ width: "100%" }} />
+              <label>Tile Size (px): </label>
+              <label>{density}</label>
+              <input name='density' type="range" min={1} max={50} defaultValue={20} value={density} class="slider" style={{ width: "100%" }} onChange={handleDensity} />
             </div>
 
           </form>
