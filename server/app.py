@@ -1,11 +1,23 @@
+import io
 from msilib.schema import MIME
 from re import I
 from PIL import Image #python image library
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, after_this_request
 from flask_cors import CORS
 import os
 import sys
 from maker import *
+import base64
+import hashlib
+import asyncio
+import threading
+from imagekitio import ImageKit
+from imagekitio.models.UploadFileRequestOptions import UploadFileRequestOptions
+imagekit = ImageKit(
+    private_key='private_rHERXddWmVnU1f3XW5oYGIqNlkw=',
+    public_key='public_MAc4Hls7UWfyyhszVd29r1Smiso=',
+    url_endpoint = 'https://ik.imagekit.io/MosaicImageMaker'
+)
 
 #Path to save-images
 IMAGES_FOLDER = os.path.join(os.getcwd(),"save_images")
@@ -51,11 +63,13 @@ def handleUploadingImage():
         return jsonify({ 'success': False, 'file': 'No File'})
     
     submission_name = files.getlist('collection')[0].filename
+    to_be_deleted_images = []
     main_mosaic_image = files.get('file')
         
     for collection_file in request.files.getlist('collection'):
         if (checkFileType(collection_file.headers['Content-Type'])):
-            submission_name = saveAndConvertImageToCollection(collection_file)
+            submission_name = saveAndConvertImage(collection_file, COLLECTION_FOLDER)
+            to_be_deleted_images.append(submission_name)
         else:
             print("not an acceptable image file")
             return jsonify({ 'success': False, 'file': 'Not Image'})
@@ -66,12 +80,28 @@ def handleUploadingImage():
     # next step, send the mosaic image
     print("sub name = ",submission_name)
     print("main name = ", main_mosaic_image)
-    main_mosaic_image.save(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename))
-    # return send_file(os.path.join(COLLECTION_FOLDER, submission_name))
+    main_mosaic_image.filename = saveAndConvertImage(main_mosaic_image, IMAGES_FOLDER)
     
     mosaic_pic(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), int(density))
     print('DONE: ', main_mosaic_image.filename)
-    return send_file(os.path.join(os.getcwd(), os.path.join(IMAGES_FOLDER, main_mosaic_image.filename)))
+    
+    # this helps deleting file after sending the result
+    return_data = io.BytesIO()
+    with open(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), 'rb') as fo:
+        reading = fo.read()
+        return_data.write(reading)
+        return_data.seek(0)    
+        base64_image = base64.b64encode(reading)
+        thread = threading.Thread(target = uploadToDB, args=(base64_image,))
+        thread.daemon = True
+        thread.start()
+    
+    for image_name in to_be_deleted_images:
+        os.remove(os.path.join(COLLECTION_FOLDER, image_name))
+    os.remove(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename))
+
+    # delete every images after sending the result
+    return send_file(return_data, mimetype=main_mosaic_image.mimetype)
 
 #check that an image is an acceptable type
 def checkFileType(filetype):
@@ -81,24 +111,32 @@ def checkFileType(filetype):
         return True
     return False
 
-def saveAndConvertImageToCollection(file):
+def saveAndConvertImage(file, folder_path):
     print("Converting and Saving Image")
     currentFileName = file.filename
-    file.save(os.path.join(COLLECTION_FOLDER, file.filename)) # os.getcwd()
+    file.save(os.path.join(folder_path, file.filename)) # os.getcwd()
 
     # TODO: Discuss again since maker.py doesn't work with .png but with .jpg (original code was png)
     if not (file.filename.endswith(".jpg") or file.filename.endswith(".jpeg")):
         print("not a jpg")
-        image = Image.open(os.path.join(COLLECTION_FOLDER, file.filename))
+        image = Image.open(os.path.join(folder_path, file.filename))
         newFileName = os.path.splitext(file.filename)[0] + ".jpg"
         print(newFileName)
         image = image.convert('RGB')
-        image.save(os.path.join(COLLECTION_FOLDER, newFileName))
+        image.save(os.path.join(folder_path, newFileName))
         image.close()
-        os.remove(os.path.join(COLLECTION_FOLDER, file.filename))
+        os.remove(os.path.join(folder_path, file.filename))
         currentFileName = newFileName
+    file.close()
         
     return currentFileName
+
+def uploadToDB(base64_image):
+    upload = imagekit.upload_file(
+            file = base64_image,
+            file_name=hashlib.sha1(base64_image).hexdigest() + ".jpg",
+            options=UploadFileRequestOptions(overwrite_file=True, use_unique_file_name= False)
+        )
 
 
 if __name__ == "__main__": 

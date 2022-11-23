@@ -111,6 +111,11 @@ button.nobg {
   background: gainsboro;
 }
 
+button.fake-button:hover {
+  background: none;
+  cursor: default;
+}
+
 .App-header {
   background-color: var(--primary-color);
   min-height: fit-content;
