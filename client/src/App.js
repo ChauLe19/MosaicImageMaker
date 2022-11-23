@@ -55,12 +55,23 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target);
+    formData.delete('collection')
+    for(const file of collection)
+    {
+      formData.append('collection', file)
+    }
 
     Upload(formData);
   }
 
   const fileSelectedHandler = (e) => {
-    setCollection([...e.target.files, ...collection])
+    let temp_collection = [...e.target.files, ...collection]
+    let unique_collection = temp_collection.filter((c, index) => {
+      return temp_collection.findIndex(obj => obj.name === c.name) === index;
+    });
+    console.log(unique_collection)
+  
+    setCollection(unique_collection)
   }
 
   const removeImage = (file) => {
