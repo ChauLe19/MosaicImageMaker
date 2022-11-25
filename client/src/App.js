@@ -1,5 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import { trackPromise } from 'react-promise-tracker';
+import LoadingSpinner from "./LoadingSpinner";
+//import { areas } from './common/constants/areas';
 import axios from "axios"
 import React from 'react';
 import {
@@ -44,7 +47,8 @@ function App() {
 
   const Upload = async (formData) => {
     console.log(formData)
-    await fetch(`${baseURL}/generate`, {
+    
+    await trackPromise (fetch(`${baseURL}/generate`, {
       method: 'POST',
       body: formData,
     }).then(resp => {
@@ -62,7 +66,7 @@ function App() {
         setMosaic(base64string);
         setImageURL(IMAGEKIT_DB + DataURIToImgURL(base64string));
       }
-    })
+    }))
   }
 
   function DataURIToImgURL(uri) {
@@ -153,7 +157,9 @@ function App() {
               </button>
             </EmailShareButton>
           </div>
+          
           <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg"} style={{ width: "100%" }} />
+
           <input className='generateButton' type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>

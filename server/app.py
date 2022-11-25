@@ -81,6 +81,7 @@ def handleUploadingImage():
     print("sub name = ",submission_name)
     print("main name = ", main_mosaic_image)
     main_mosaic_image.filename = saveAndConvertImage(main_mosaic_image, IMAGES_FOLDER)
+    # spinner signal
     
     mosaic_pic(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), int(density))
     print('DONE: ', main_mosaic_image.filename)
