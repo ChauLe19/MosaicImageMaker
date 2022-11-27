@@ -1,6 +1,4 @@
 import React from 'react';
-//import LoadingSpinner from "./loadingSpinner/loadingSpinner";
-//import { AreaProvider } from 'react-area'; //install react-area
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';

@@ -71,8 +71,8 @@ def handleUploadingImage():
             submission_name = saveAndConvertImage(collection_file, COLLECTION_FOLDER)
             to_be_deleted_images.append(submission_name)
         else:
-            print("not an acceptable image file")
-            return jsonify({ 'success': False, 'file': 'Not Image'})
+            print(collection_file.filename + " is not an acceptable image file") #just let the mosaic be created without it 
+            #return jsonify({ 'success': False, 'file': 'Not Image'})
 
 
 
@@ -81,8 +81,7 @@ def handleUploadingImage():
     print("sub name = ",submission_name)
     print("main name = ", main_mosaic_image)
     main_mosaic_image.filename = saveAndConvertImage(main_mosaic_image, IMAGES_FOLDER)
-    # spinner signal
-    
+
     mosaic_pic(os.path.join(IMAGES_FOLDER, main_mosaic_image.filename), int(density))
     print('DONE: ', main_mosaic_image.filename)
     
