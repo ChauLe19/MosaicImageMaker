@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import { trackPromise } from 'react-promise-tracker';
-import LoadingSpinner from "./LoadingSpinner";
-//import { areas } from './common/constants/areas';
+import { useState } from 'react';
+import { Bars } from 'react-loader-spinner'; //install react-loader-spinner
 import axios from "axios"
 import React from 'react';
 import {
@@ -23,6 +23,7 @@ import {
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
+import { RenderArea } from 'react-area';
 const sha1 = require('js-sha1')
 const IMAGEKIT_DB = 'https://ik.imagekit.io/MosaicImageMaker/'
 
@@ -34,7 +35,7 @@ function App() {
   const [collection, setCollection] = React.useState([])
   const [density, setDensity] = React.useState(20)
   const [imageURL, setImageURL] = React.useState("")
-
+  const [isLoading, setIsLoading] = useState(false);
   // this is mostly for testing
   // TODO: NOT NEEDED ANYMORE
   // React.useEffect(() => {
@@ -47,8 +48,8 @@ function App() {
 
   const Upload = async (formData) => {
     console.log(formData)
-    
-    await trackPromise (fetch(`${baseURL}/generate`, {
+    setIsLoading(true);
+    await fetch(`${baseURL}/generate`, {
       method: 'POST',
       body: formData,
     }).then(resp => {
@@ -66,7 +67,8 @@ function App() {
         setMosaic(base64string);
         setImageURL(IMAGEKIT_DB + DataURIToImgURL(base64string));
       }
-    }))
+    })
+    setIsLoading(false);
   }
 
   function DataURIToImgURL(uri) {
@@ -157,9 +159,7 @@ function App() {
               </button>
             </EmailShareButton>
           </div>
-          
-          <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg"} style={{ width: "100%" }} />
-
+            {isLoading ? <div style={{ width: "100%" , alignSelf: "center"}}><Bars color="#3066be" height="100%" width="100%" /></div> : <img src={mosaic ? `data:image/jpeg;base64,${mosaic}` : "https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg"} style={{ width: "100%" }} />}
           <input className='generateButton' type="submit" form="GenerateFormID" style={{ width: "100%" }} value="Generate" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", padding: "5vh" }}>
