@@ -9,11 +9,21 @@ import matplotlib.pyplot as plt
 import math
 import copy
 import warnings
+import threading
+import concurrent.futures #threadpool
 from scipy import spatial
 
 tile_size = (10, 10)
 tile_imgs = []
 tiles = []  # resizes all the images in picture
+
+#threading function #1
+def findhuehelper(tile):
+
+    print("findhuehelper")
+    arry=np.array(tile)
+    return arry.mean(axis=0).mean(axis=0)# get the average of the a row
+    
 
 def findhue(mainpath, tiles):
     # resizing the the image to be smaller and than making it big pixelizing the image
@@ -31,12 +41,15 @@ def findhue(mainpath, tiles):
     avg_colors = []
 
     for tile in tiles:
+        #with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        #    future = executor.map(findhuehelper, tile)
+        #    print(future.result())
        #first breaks each pixel in a tile into (20x20 indexs with RGB truple values)
-        arry=np.array(tile)
-        avg_avg = arry.mean(axis=0).mean(axis=0)# get the average of the a row
+        #arry=np.array(tile)
+        #avg_avg = arry.mean(axis=0).mean(axis=0)# get the average of the a row
        # avg_avg=avg_color#a verages the colors of the row
-
-        avg_colors.append(avg_avg)
+        avg_colors.append(findhuehelper(tile))
+        #avg_colors.append(avg_avg)
 
     # makes a tree for our colors
     tree = spatial.KDTree(avg_colors)
@@ -52,6 +65,9 @@ def findhue(mainpath, tiles):
 
     return pixel_main, closest_tiles
 
+#threading function #2
+def organizehelper():
+    print("organizehelper")
 
 def organize(pixel_main, close_tiles, result_image_path): # Organizes the tiles to be drawn on the mosiac image
     '''

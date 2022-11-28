@@ -14,6 +14,10 @@ cd server
 pip3 install flask
 pip3 install flask-cors
 pip3 install Pillow
+pip3 install matplotlib.pyplot
+pip3 install scipy
+pip3 install imagekitio
+pip3 install numpy
 ```
 
 3. Start the server
