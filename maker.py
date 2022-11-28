@@ -10,7 +10,7 @@ import math
 import copy
 import warnings
 import threading
-import concurrent.futures #threadpool
+from concurrent.futures import ThreadPoolExecutor
 from scipy import spatial
 
 tile_size = (10, 10)
@@ -19,10 +19,9 @@ tiles = []  # resizes all the images in picture
 
 #threading function #1
 def findhuehelper(tile):
-
-    print("findhuehelper")
     arry=np.array(tile)
-    return arry.mean(axis=0).mean(axis=0)# get the average of the a row
+    avg_colors.append(arry.mean(axis=0).mean(axis=0))
+    #return arry.mean(axis=0).mean(axis=0)# get the average of the a row
     
 
 def findhue(mainpath, tiles):
@@ -38,18 +37,14 @@ def findhue(mainpath, tiles):
     # pixel_main.show()
 
     # calculate avg color for each tile
+    global avg_colors
     avg_colors = []
 
     for tile in tiles:
-        #with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        #    future = executor.map(findhuehelper, tile)
-        #    print(future.result())
-       #first breaks each pixel in a tile into (20x20 indexs with RGB truple values)
-        #arry=np.array(tile)
-        #avg_avg = arry.mean(axis=0).mean(axis=0)# get the average of the a row
-       # avg_avg=avg_color#a verages the colors of the row
-        avg_colors.append(findhuehelper(tile))
-        #avg_colors.append(avg_avg)
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            future = executor.submit(findhuehelper, tile)
+            #print(future.result())
+        #findhuehelper(tile)
 
     # makes a tree for our colors
     tree = spatial.KDTree(avg_colors)
