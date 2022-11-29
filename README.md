@@ -1,4 +1,13 @@
-This repo is for testing client written in JS (ReactJS) and server written in Python. Currently, user can upload a picture, the server receives it and save the image in `save-images` folder.
+ECE 4574 Project Fall 2022
+Chau Le, Quentin Holmes, Ethan Dingus
+
+This repo contains all the source code of the project, as well as some test images that can be used.
+
+The client side is a React Web App, which communicates with a server side implemented with Python. The User is able to select a main image which they want to convert into a mosaic,
+a density value that determines the amount of individual tiles that make up the mosaic, as well as a collection of other images which are the mosaic tiles themselves. After generating
+the mosaic, the user is able to download the image to their device, or share the new image via various social media platforms or email.
+
+Follow the setup steps in order to start and run the project.
 
 Setup:
 
