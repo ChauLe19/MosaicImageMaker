@@ -13,6 +13,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from scipy import spatial
 
+MAX_WORKERS = 8
 tile_size = (10, 10)
 tile_imgs = []
 tiles = []  # resizes all the images in picture
@@ -41,7 +42,7 @@ def findhue(mainpath, tiles):
     avg_colors = []
 
     for tile in tiles:
-        with ThreadPoolExecutor(max_workers=8) as executor:
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             future = executor.submit(findhuehelper, tile)
             #print(future.result())
         #findhuehelper(tile)
@@ -61,8 +62,11 @@ def findhue(mainpath, tiles):
     return pixel_main, closest_tiles
 
 #threading function #2
-def organizehelper():
-    print("organizehelper")
+#def organizehelper(i, j):
+#    print("organizehelper")
+#   x,y = i*w, j*h #globals
+#   index = close_tiles[i, j]
+
 
 def organize(pixel_main, close_tiles, result_image_path): # Organizes the tiles to be drawn on the mosiac image
     '''
@@ -75,6 +79,9 @@ def organize(pixel_main, close_tiles, result_image_path): # Organizes the tiles 
     w = tile_size[0]     # width of the tiles
     h = tile_size[1]     # height of the tiles
 
+    #with ThreadPoolExecutor(max_workers=8) as executor:
+        #future = executor.submit(organizehelper, i, j)
+        
     for i in range(width):
         for j in range(height):
             x,y = i*w, j*h
