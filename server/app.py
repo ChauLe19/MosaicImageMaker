@@ -1,4 +1,4 @@
-# App.js    Ethan Dingus, Chau Le     Virginia Tech       Dec 6, 2022 
+# App.py    Ethan Dingus, Chau Le     Virginia Tech       Dec 6, 2022 
 # This is the server for Mosaic Image Maker.
 
 import io
