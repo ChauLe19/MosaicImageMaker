@@ -1,4 +1,4 @@
-#  maker.py    Quentin Holmes, Chau Le     Virginia Tech       Dec 6, 2022 
+#  maker.py    Quentin Holmes, Chau Le, Ethan Dingus     Virginia Tech       Dec 6, 2022 
 # This is the UI for Mosaic Image Maker Client.
 import numpy as np
 import os
