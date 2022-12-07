@@ -1,3 +1,5 @@
+#  maker.py    Quentin Holmes, Chau Le     Virginia Tech       Dec 6, 2022 
+# This is the UI for Mosaic Image Maker Client.
 import numpy as np
 import os
 import cv2  # may need to install library on computer use link-->https://blog.finxter.com/how-to-install-opencv-on-pycharm/
