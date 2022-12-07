@@ -1,3 +1,6 @@
+/*  App.js    Chau Le     Virginia Tech       Dec 6, 2022 
+ *  This is the UI for Mosaic Image Maker Client.
+ */
 import logo from './logo.svg';
 import './App.css';
 import { trackPromise } from 'react-promise-tracker';
