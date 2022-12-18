@@ -1,7 +1,6 @@
 flask
 Flask-Cors
 Pillow
-matplotlib
 imagekitio
 numpy
 scipy
