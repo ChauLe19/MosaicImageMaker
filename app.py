@@ -5,14 +5,12 @@ import io
 from msilib.schema import MIME
 from re import I
 from PIL import Image #python image library
-from flask import Flask, request, jsonify, send_file, after_this_request
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
-import sys
 from maker import *
 import base64
 import hashlib
-import asyncio
 import threading
 from imagekitio import ImageKit
 from imagekitio.models.UploadFileRequestOptions import UploadFileRequestOptions
