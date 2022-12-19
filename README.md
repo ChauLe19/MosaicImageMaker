@@ -20,13 +20,7 @@ npm install
 2. Install dependencies in the server (If you don't have python installed, please do so)
 ```
 cd server
-pip3 install flask
-pip3 install flask-cors
-pip3 install Pillow
-pip3 install matplotlib.pyplot
-pip3 install scipy
-pip3 install imagekitio
-pip3 install numpy
+pip3 install -r requirements.txt
 ```
 
 3. Start the server
