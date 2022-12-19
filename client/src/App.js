@@ -31,7 +31,7 @@ const sha1 = require('js-sha1')
 const IMAGEKIT_DB = 'https://ik.imagekit.io/MosaicImageMaker/'
 
 function App() {
-  const baseURL = "http://127.0.0.1:5000";
+  const baseURL = "https://mosaic-image-maker-api.herokuapp.com/";
   const [post, setPost] = React.useState("");
   const [preview, setPreview] = React.useState("https://thumbs.dreamstime.com/b/thin-line-black-camera-logo-like-upload-your-photo-thin-line-black-camera-logo-like-upload-your-photo-graphic-art-design-element-106033006.jpg");
   const [mosaic, setMosaic] = React.useState("");
