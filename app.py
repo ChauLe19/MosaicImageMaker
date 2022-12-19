@@ -2,8 +2,6 @@
 # This is the server for Mosaic Image Maker.
 
 import io
-from msilib.schema import MIME
-from re import I
 from PIL import Image #python image library
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
@@ -33,14 +31,17 @@ app = Flask(__name__)
 cors = CORS(app)
 
 
+#Create the receiver API GET endpoint:
+@app.route("/")
+def home():
+    return "receiving GET request"
 
 #Create the receiver API POST endpoint:
 @app.route("/receiver", methods=["POST"])
 def postME():
     # data = request.get_json()
 #    data = jsonify(data)
-    print(request)
-    return "receiving " + str(request.get_json())
+    return "receiving POST request"
 
 
 @app.route('/generate', methods=['POST'])

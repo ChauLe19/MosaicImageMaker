@@ -115,13 +115,3 @@ def mosaic_pic(main_pic, density):
     pixel_main,close_tiles = findhue(mainpath, tiles)
     mosaic_img = organize(pixel_main,close_tiles, mainpath)
     
-"""
-def main(img,otherimgs):
-    #First we find the avg colors of the tile images and then find the closest color to it
-
-
-    main(mainimg, tiles)  # call to use the main image
-    return True
-
-
-"""
