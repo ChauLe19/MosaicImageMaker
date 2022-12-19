@@ -4,3 +4,4 @@ Pillow
 imagekitio
 numpy
 scipy
+gunicorn==20.0.4
